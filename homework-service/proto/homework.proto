@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package proto;
+
+service HomeworkService {
+  rpc GetSum (Numbers) returns (Sum) {}
+}
+
+message Numbers {
+  int64 nb1 = 1;
+  int64 nb2 = 2;
+}
+
+message Sum {
+  int64 sum = 1;
+}
