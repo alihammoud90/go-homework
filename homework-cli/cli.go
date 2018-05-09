@@ -22,6 +22,33 @@ func main() {
 	defer conn.Close()
 	client := pb.NewHomeworkServiceClient(conn)
 
+	fmt.Print("Enter Array size: ");
+	var size int;
+	fmt.Scanln(&size);
+	array := make([]int64, size);
+	for i := 0; i < size; i++ {
+		fmt.Printf("Number %d: ", i + 1);
+		var nbx int64;
+		fmt.Scanln(&nbx);
+		array[i] = nbx;
+	}
+
+	result, err := client.OrderNumbers(context.Background(), &pb.NumbersToOrder{Array: array});
+	if err != nil {
+		log.Fatalf("Could not get sum: %v", err)
+	}
+	log.Println("ordered: ", result.OrderedArray);
+}
+
+func main1() {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pb.NewHomeworkServiceClient(conn)
+
 	fmt.Print("Enter First Number: ");
 	var nb1 int64;
 	fmt.Scanln(&nb1);

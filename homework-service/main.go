@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net"
+	"sort"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -18,6 +19,11 @@ type server struct{}
 
 func (s *server) GetSum(ctx context.Context, in *pb.Numbers) (*pb.Sum, error) {
 	return &pb.Sum{Sum: in.Nb1 + in.Nb2}, nil
+}
+
+func (s *server) OrderNumbers(ctx context.Context, in *pb.NumbersToOrder) (*pb.OrderedNumbers, error) {
+	sort.Slice(in.Array, func(i, j int) bool { return in.Array[i] < in.Array[j] })
+	return &pb.OrderedNumbers{OrderedArray: in.Array}, nil
 }
 
 func main() {

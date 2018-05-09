@@ -35,7 +35,7 @@ func (m *Numbers) Reset()         { *m = Numbers{} }
 func (m *Numbers) String() string { return proto.CompactTextString(m) }
 func (*Numbers) ProtoMessage()    {}
 func (*Numbers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_homework_2c2159372bd5b089, []int{0}
+	return fileDescriptor_homework_6eb4e470a1c74bb7, []int{0}
 }
 func (m *Numbers) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Numbers.Unmarshal(m, b)
@@ -80,7 +80,7 @@ func (m *Sum) Reset()         { *m = Sum{} }
 func (m *Sum) String() string { return proto.CompactTextString(m) }
 func (*Sum) ProtoMessage()    {}
 func (*Sum) Descriptor() ([]byte, []int) {
-	return fileDescriptor_homework_2c2159372bd5b089, []int{1}
+	return fileDescriptor_homework_6eb4e470a1c74bb7, []int{1}
 }
 func (m *Sum) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Sum.Unmarshal(m, b)
@@ -107,9 +107,87 @@ func (m *Sum) GetSum() int64 {
 	return 0
 }
 
+type NumbersToOrder struct {
+	Array                []int64  `protobuf:"varint,1,rep,packed,name=array" json:"array,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NumbersToOrder) Reset()         { *m = NumbersToOrder{} }
+func (m *NumbersToOrder) String() string { return proto.CompactTextString(m) }
+func (*NumbersToOrder) ProtoMessage()    {}
+func (*NumbersToOrder) Descriptor() ([]byte, []int) {
+	return fileDescriptor_homework_6eb4e470a1c74bb7, []int{2}
+}
+func (m *NumbersToOrder) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NumbersToOrder.Unmarshal(m, b)
+}
+func (m *NumbersToOrder) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NumbersToOrder.Marshal(b, m, deterministic)
+}
+func (dst *NumbersToOrder) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NumbersToOrder.Merge(dst, src)
+}
+func (m *NumbersToOrder) XXX_Size() int {
+	return xxx_messageInfo_NumbersToOrder.Size(m)
+}
+func (m *NumbersToOrder) XXX_DiscardUnknown() {
+	xxx_messageInfo_NumbersToOrder.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NumbersToOrder proto.InternalMessageInfo
+
+func (m *NumbersToOrder) GetArray() []int64 {
+	if m != nil {
+		return m.Array
+	}
+	return nil
+}
+
+type OrderedNumbers struct {
+	OrderedArray         []int64  `protobuf:"varint,1,rep,packed,name=orderedArray" json:"orderedArray,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *OrderedNumbers) Reset()         { *m = OrderedNumbers{} }
+func (m *OrderedNumbers) String() string { return proto.CompactTextString(m) }
+func (*OrderedNumbers) ProtoMessage()    {}
+func (*OrderedNumbers) Descriptor() ([]byte, []int) {
+	return fileDescriptor_homework_6eb4e470a1c74bb7, []int{3}
+}
+func (m *OrderedNumbers) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OrderedNumbers.Unmarshal(m, b)
+}
+func (m *OrderedNumbers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OrderedNumbers.Marshal(b, m, deterministic)
+}
+func (dst *OrderedNumbers) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OrderedNumbers.Merge(dst, src)
+}
+func (m *OrderedNumbers) XXX_Size() int {
+	return xxx_messageInfo_OrderedNumbers.Size(m)
+}
+func (m *OrderedNumbers) XXX_DiscardUnknown() {
+	xxx_messageInfo_OrderedNumbers.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OrderedNumbers proto.InternalMessageInfo
+
+func (m *OrderedNumbers) GetOrderedArray() []int64 {
+	if m != nil {
+		return m.OrderedArray
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Numbers)(nil), "proto.Numbers")
 	proto.RegisterType((*Sum)(nil), "proto.Sum")
+	proto.RegisterType((*NumbersToOrder)(nil), "proto.NumbersToOrder")
+	proto.RegisterType((*OrderedNumbers)(nil), "proto.OrderedNumbers")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -124,6 +202,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 type HomeworkServiceClient interface {
 	GetSum(ctx context.Context, in *Numbers, opts ...grpc.CallOption) (*Sum, error)
+	OrderNumbers(ctx context.Context, in *NumbersToOrder, opts ...grpc.CallOption) (*OrderedNumbers, error)
 }
 
 type homeworkServiceClient struct {
@@ -143,10 +222,20 @@ func (c *homeworkServiceClient) GetSum(ctx context.Context, in *Numbers, opts ..
 	return out, nil
 }
 
+func (c *homeworkServiceClient) OrderNumbers(ctx context.Context, in *NumbersToOrder, opts ...grpc.CallOption) (*OrderedNumbers, error) {
+	out := new(OrderedNumbers)
+	err := grpc.Invoke(ctx, "/proto.HomeworkService/OrderNumbers", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for HomeworkService service
 
 type HomeworkServiceServer interface {
 	GetSum(context.Context, *Numbers) (*Sum, error)
+	OrderNumbers(context.Context, *NumbersToOrder) (*OrderedNumbers, error)
 }
 
 func RegisterHomeworkServiceServer(s *grpc.Server, srv HomeworkServiceServer) {
@@ -171,6 +260,24 @@ func _HomeworkService_GetSum_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HomeworkService_OrderNumbers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NumbersToOrder)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HomeworkServiceServer).OrderNumbers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.HomeworkService/OrderNumbers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HomeworkServiceServer).OrderNumbers(ctx, req.(*NumbersToOrder))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _HomeworkService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.HomeworkService",
 	HandlerType: (*HomeworkServiceServer)(nil),
@@ -179,22 +286,31 @@ var _HomeworkService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetSum",
 			Handler:    _HomeworkService_GetSum_Handler,
 		},
+		{
+			MethodName: "OrderNumbers",
+			Handler:    _HomeworkService_OrderNumbers_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/homework.proto",
 }
 
-func init() { proto.RegisterFile("proto/homework.proto", fileDescriptor_homework_2c2159372bd5b089) }
+func init() { proto.RegisterFile("proto/homework.proto", fileDescriptor_homework_6eb4e470a1c74bb7) }
 
-var fileDescriptor_homework_2c2159372bd5b089 = []byte{
-	// 141 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_homework_6eb4e470a1c74bb7 = []byte{
+	// 214 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x29, 0x28, 0xca, 0x2f,
 	0xc9, 0xd7, 0xcf, 0xc8, 0xcf, 0x4d, 0x2d, 0xcf, 0x2f, 0xca, 0xd6, 0x03, 0x73, 0x85, 0x58, 0xc1,
 	0x94, 0x92, 0x2e, 0x17, 0xbb, 0x5f, 0x69, 0x6e, 0x52, 0x6a, 0x51, 0xb1, 0x90, 0x00, 0x17, 0x73,
 	0x5e, 0x92, 0xa1, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x73, 0x10, 0x88, 0x09, 0x11, 0x31, 0x92, 0x60,
 	0x82, 0x89, 0x18, 0x29, 0x89, 0x73, 0x31, 0x07, 0x97, 0xe6, 0x82, 0x24, 0x8a, 0x4b, 0x73, 0x61,
-	0x4a, 0x8b, 0x4b, 0x73, 0x8d, 0x2c, 0xb9, 0xf8, 0x3d, 0xa0, 0x16, 0x04, 0xa7, 0x16, 0x95, 0x65,
-	0x26, 0xa7, 0x0a, 0xa9, 0x71, 0xb1, 0xb9, 0xa7, 0x96, 0x80, 0x94, 0xf3, 0x41, 0xec, 0xd4, 0x83,
-	0xda, 0x24, 0xc5, 0x05, 0xe5, 0x07, 0x97, 0xe6, 0x2a, 0x31, 0x24, 0xb1, 0x81, 0x39, 0xc6, 0x80,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0xf3, 0xfc, 0x07, 0x7a, 0xa8, 0x00, 0x00, 0x00,
+	0x4a, 0x8b, 0x4b, 0x73, 0x95, 0xd4, 0xb8, 0xf8, 0xa0, 0xe6, 0x84, 0xe4, 0xfb, 0x17, 0xa5, 0xa4,
+	0x16, 0x09, 0x89, 0x70, 0xb1, 0x26, 0x16, 0x15, 0x25, 0x56, 0x4a, 0x30, 0x2a, 0x30, 0x6b, 0x30,
+	0x07, 0x41, 0x38, 0x4a, 0x26, 0x5c, 0x7c, 0x60, 0xe9, 0xd4, 0x14, 0x98, 0xb5, 0x4a, 0x5c, 0x3c,
+	0xf9, 0x10, 0x11, 0x47, 0x24, 0xe5, 0x28, 0x62, 0x46, 0x95, 0x5c, 0xfc, 0x1e, 0x50, 0xe7, 0x07,
+	0xa7, 0x16, 0x95, 0x65, 0x26, 0xa7, 0x0a, 0xa9, 0x71, 0xb1, 0xb9, 0xa7, 0x96, 0x80, 0x1c, 0xc3,
+	0x07, 0xf1, 0x91, 0x1e, 0xd4, 0x40, 0x29, 0x2e, 0x28, 0x3f, 0xb8, 0x34, 0x57, 0x89, 0x41, 0xc8,
+	0x8e, 0x8b, 0x07, 0x6c, 0x21, 0xcc, 0x3a, 0x51, 0x54, 0xd5, 0x50, 0xd7, 0x4a, 0xc1, 0x84, 0x51,
+	0x1d, 0xa7, 0xc4, 0x90, 0xc4, 0x06, 0x16, 0x37, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x3d, 0x64,
+	0xdd, 0xe0, 0x46, 0x01, 0x00, 0x00,
 }

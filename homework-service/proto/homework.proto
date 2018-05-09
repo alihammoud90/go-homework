@@ -4,6 +4,7 @@ package proto;
 
 service HomeworkService {
   rpc GetSum (Numbers) returns (Sum) {}
+  rpc OrderNumbers (NumbersToOrder) returns (OrderedNumbers) {}
 }
 
 message Numbers {
@@ -13,4 +14,12 @@ message Numbers {
 
 message Sum {
   int64 sum = 1;
+}
+
+message NumbersToOrder {
+  repeated int64 array = 1;
+}
+
+message OrderedNumbers {
+  repeated int64 orderedArray = 1;
 }
