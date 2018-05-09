@@ -1,0 +1,12 @@
+FROM golang:1.9.1
+
+WORKDIR homework-service
+COPY homework-service .
+COPY homework-service/proto ../homework-service/proto
+
+RUN go get -v ./...
+RUN go install -v ./...
+
+EXPOSE 50052
+
+CMD [ "homework-service" ]
