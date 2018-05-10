@@ -14,7 +14,6 @@ const (
 )
 
 func main() {
-	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Did not connect: %v", err)
@@ -22,6 +21,37 @@ func main() {
 	defer conn.Close()
 	client := pb.NewHomeworkServiceClient(conn)
 
+	fmt.Println("Choose Task: ")
+	fmt.Println("1) Sum ")
+	fmt.Println("2) Order Numbers ")
+	var task int
+	fmt.Scanln(&task)
+	switch task {
+	case 1:
+		callSum(client)
+	case 2:
+		callOrder(client)
+	default:
+		fmt.Println("Invalid Task")
+	}
+}
+
+func callSum(client pb.HomeworkServiceClient) {
+	fmt.Print("Enter First Number: ");
+	var nb1 int64;
+	fmt.Scanln(&nb1);
+	fmt.Print("Enter Second Number: ");
+	var nb2 int64;
+	fmt.Scanln(&nb2);
+
+	sum, err := client.GetSum(context.Background(), &pb.Numbers{Nb1: nb1, Nb2: nb2});
+	if err != nil {
+		log.Fatalf("Could not get sum: %v", err)
+	}
+	log.Printf("Sum = %d", sum.Sum);
+}
+
+func callOrder(client pb.HomeworkServiceClient) {
 	fmt.Print("Enter Array size: ");
 	var size int;
 	fmt.Scanln(&size);
@@ -38,27 +68,4 @@ func main() {
 		log.Fatalf("Could not get sum: %v", err)
 	}
 	log.Println("ordered: ", result.OrderedArray);
-}
-
-func main1() {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
-	}
-	defer conn.Close()
-	client := pb.NewHomeworkServiceClient(conn)
-
-	fmt.Print("Enter First Number: ");
-	var nb1 int64;
-	fmt.Scanln(&nb1);
-	fmt.Print("Enter Second Number: ");
-	var nb2 int64;
-	fmt.Scanln(&nb2);
-
-	sum, err := client.GetSum(context.Background(), &pb.Numbers{Nb1: nb1, Nb2: nb2});
-	if err != nil {
-		log.Fatalf("Could not get sum: %v", err)
-	}
-	log.Printf("Sum = %d", sum.Sum);
 }
